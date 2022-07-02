@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const secret = require("./secret")
 
 const app = express();
 app.use(express.static('css'))
@@ -12,7 +13,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 mongoose.connect(
-  "mongodb+srv://dbUser:Px0paLYznaE2QjJ7@cluster0.pokrv.mongodb.net/todolistDB?retryWrites=true&w=majority"
+  `mongodb+srv://${secret.user}:${secret.password}@cluster0.dam38h3.mongodb.net/todolistDB?retryWrites=true&w=majority`
 );
 
 const itemsSchema = {
