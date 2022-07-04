@@ -1,24 +1,27 @@
 <%- include('header'); -%>
 
 <div class="box" id="heading">
-  <h1><%= listTitle %> List</h1>
-</div>
+    <h1><%= list.name %></h1>
+  </div>
+
 <div class="box">
-  <% tasks.forEach(element => { %>
-  <form class="" action="/delete" method="post">
+  <% list.tasks.forEach(element => { %>
+  <form class="" action="/<%= list.id %>/<%= element.id %>/delete" method="post">
     <div class="item">
       <input type="checkbox">
-      <p><%= element.name %></p>
-      <input type="hidden" name="_id" value="<%= element.id %>">
+      <p><%= element.task %></p>
+      <input type="hidden" name="listId" value="<%= list.id %>">
+      <input type="hidden" name="taskId" value="<%= element.id %>">
       <button type="submit"><i class="fa-regular fa-trash-can fa-lg"></i></button>
     </div>
   </form>
   <% }) %>
 
 
-  <form action="/" method="post" class="item">
+  <form action="/<%= list.id %>" method="post" class="item">
+    <input type="hidden" name="_id" value="<%= list.id %>">
     <input type="text" name="newTask" placeholder="Enter a new task..." autocomplete="off">
-    <button type="submit" name="addButton" value=<%= listTitle %>>+</button>
+    <button type="submit" name="addButton">+</button>
   </form>
 </div>
 <%- include('footer'); -%>

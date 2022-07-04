@@ -17,12 +17,23 @@ mongoose.connect(
 );
 
 const itemsSchema = {
-  name: {
+  task: {
     type: String,
     required: true
   }
 }
 
+const listSchema = {
+  name: {
+    type: String,
+    required: true
+  },
+  tasks: [itemsSchema]
+}
+
+
+
+const List = mongoose.model("List", listSchema);
 const Item = mongoose.model("Item", itemsSchema);
 
 const defaultItems = [new Item({
@@ -37,61 +48,94 @@ const defaultItems = [new Item({
 ];
 
 
-app.get("/", function(req, res) {
-  Item.find({}, (err, tasks) => {
-    if (tasks.length === 0) {
-      Item.insertMany(defaultItems, (error) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Items saved to dB");
-        }
-      });
-      res.redirect("/");
+app.get("/", (req, res) => {
+  List.find({}, (err, lists) => {
+    if (lists.length === 0) {
+      if (err) {
+        console.log(err);
+      }
+      res.render('home-blank')
     } else {
-      res.render('list', {
-        listTitle: "Today's",
-        tasks: tasks
+      res.render('home', {
+        lists: lists
       });
     }
   });
 });
 
-app.get("/about", function(req, res) {
-  res.render('about');
-});
 
-app.post("/", function(req, res) {
-  if (req.body.addButton === "Work") {
-    workTasks.push(req.body.newTask);
-    res.redirect("/work");
-  } else {
-    Item.insertMany({
-      name: req.body.newTask
-    }, (error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Item saved to db");
-      }
-    });
-    res.redirect("/");
-  }
-});
-
-app.post("/delete", function(req, res) {
-  Item.deleteOne({
-    _id: req.body._id
-  }, error => {
+app.post("/", (req, res) => {
+  List.insertMany({
+    name: req.body.newList,
+    tasks: {
+      task: "Enter your first task below"
+    }
+  }, (error) => {
     if (error) {
       console.log(error);
     } else {
-      console.log("Item deleted from db");
+      console.log("List saved to db");
+      res.redirect("/");
     }
-  })
-  res.redirect("/")
+  });
 });
-app.listen(3000, function() {
+
+app.get("/:listId", (req, res) => {
+  List.findById(req.params.listId, (err, list) => {
+    if (list === null) {
+      console.log("There must have been an error, no list by that ID found");
+      console.log(err);
+    } else {
+      res.render('list', {
+        list: list
+      });
+    }
+  });
+});
+
+app.post("/:listId", (req, res) => {
+  List.findById(req.body._id, (err, list) => {
+    if (err) {
+      console.log(err);
+    } else {
+      list.tasks.push({
+        task: req.body.newTask
+      })
+      list.save((err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect(`/${req.body._id}`)
+        }
+      })
+
+    }
+  });
+});
+
+app.post("/:listiD/:taskId/delete", (req, res) => {
+  List.findById(req.body.listId, (error, list) => {
+    if (error) {
+      console.log(error);
+    } else {
+      list.tasks.id(req.body.taskId).remove();
+      list.save((err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(`Task deleted from list ${list.name}`);
+          res.redirect(`/${req.body.listId}`)
+        }
+      });
+    }
+  });
+});
+
+app.get("/about", (req, res) => {
+  res.render('about');
+});
+
+app.listen(3000, () => {
   console.log("Server started on port 3000.");
 });
 

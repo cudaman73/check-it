@@ -23,6 +23,13 @@ h1 {
   text-align: center;
 }
 
+#heading button {
+  background-color: #A683E3;
+  color: white;
+  position: relative;
+  right: 80px;
+}
+
 .item {
   min-height: 70px;
   display: flex;
@@ -107,6 +114,6 @@ footer {
   text-align: center;
 }
 
-.fa-trash-can {
+.fa-lg {
   opacity: .5;
 }
