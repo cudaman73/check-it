@@ -20,6 +20,10 @@ const itemsSchema = {
   task: {
     type: String,
     required: true
+  },
+  checked: {
+    type: Boolean,
+    default: false
   }
 }
 
@@ -86,6 +90,7 @@ app.get("/:listId", (req, res) => {
       console.log("There must have been an error, no list by that ID found");
       console.log(err);
     } else {
+      console.log(list);
       res.render('list', {
         list: list
       });
@@ -99,7 +104,8 @@ app.post("/:listId", (req, res) => {
       console.log(err);
     } else {
       list.tasks.push({
-        task: req.body.newTask
+        task: req.body.newTask,
+        checked: false
       })
       list.save((err) => {
         if (err) {
@@ -113,8 +119,25 @@ app.post("/:listId", (req, res) => {
   });
 });
 
+app.put("/:listId/put", (req, res) => {
+  List.updateOne({
+    _id: req.body.listId,
+    "tasks._id": req.body.taskId
+  }, {
+    "$set": {
+      "tasks.$.checked": req.body.checked
+    }
+  }, (error) => {
+    if (error) {
+      console.log(error);
+    }
+  })
+})
+
 app.post("/:listId/delete", (req, res) => {
-  List.deleteOne({ _id : req.body.listId}, (deleted) => {
+  List.deleteOne({
+    _id: req.body.listId
+  }, (deleted) => {
     console.log("List deleted!");
   })
   res.redirect("/")

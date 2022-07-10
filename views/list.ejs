@@ -14,7 +14,7 @@
   <% list.tasks.forEach(element => { %>
   <form class="" action="/<%= list.id %>/<%= element.id %>/delete" method="post">
     <div class="item">
-      <input type="checkbox">
+      <input type="checkbox" value="<%=list.id%>" name="<%= element.id %>" <%= element.checked ? "checked" : "" %>>
       <p><%= element.task %></p>
       <input type="hidden" name="listId" value="<%= list.id %>">
       <input type="hidden" name="taskId" value="<%= element.id %>">
@@ -30,4 +30,7 @@
     <button type="submit" name="addButton">+</button>
   </form>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/script.js"></script>
 <%- include('footer'); -%>
