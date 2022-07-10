@@ -8,6 +8,7 @@ html {
 h1 {
   color: #fff;
   padding: 10px;
+  margin: 0;
 }
 
 .box {
@@ -18,16 +19,25 @@ h1 {
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
 }
 
-#heading {
-  background-color: #A683E3;
-  text-align: center;
+.heading-left {
+  flex: 10%
 }
 
-#heading button {
+.heading-left i {
+  display: inline-block;
+  margin: 30px 0;
   background-color: #A683E3;
   color: white;
-  position: relative;
-  right: 80px;
+}
+
+.heading-right {
+  flex: 90%;
+}
+
+#heading {
+  display: flex;
+  background-color: #A683E3;
+  text-align: center;
 }
 
 .item {
@@ -75,6 +85,7 @@ form.item button {
   font-size: 30px;
   padding-bottom: 6px;
   border-width: 0;
+  margin-right: 20px;
 }
 
 button {
@@ -82,7 +93,7 @@ button {
   border-width: 0;
 }
 
-button[type="submit"] {
+.fa-solid {
   margin: 20px;
 }
 

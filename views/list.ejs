@@ -1,8 +1,14 @@
 <%- include('header'); -%>
 
 <div class="box" id="heading">
+  <div class="heading-left">
+    <a href="/"><i class="fa-solid fa-chevron-left fa-lg fa-fw"></i></a>
+  </div>
+  <div class="heading-right">
     <h1><%= list.name %></h1>
   </div>
+
+</div>
 
 <div class="box">
   <% list.tasks.forEach(element => { %>
@@ -12,7 +18,7 @@
       <p><%= element.task %></p>
       <input type="hidden" name="listId" value="<%= list.id %>">
       <input type="hidden" name="taskId" value="<%= element.id %>">
-      <button type="submit"><i class="fa-regular fa-trash-can fa-lg"></i></button>
+      <button type="submit"><i class="fa-solid fa-trash-can fa-lg"></i></button>
     </div>
   </form>
   <% }) %>
