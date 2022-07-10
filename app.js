@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const secret = require("./secret")
 
 const app = express();
-app.use(express.static('css'))
+app.use(express.static('static'))
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   extended: true
@@ -112,6 +112,13 @@ app.post("/:listId", (req, res) => {
     }
   });
 });
+
+app.post("/:listId/delete", (req, res) => {
+  List.deleteOne({ _id : req.body.listId}, (deleted) => {
+    console.log("List deleted!");
+  })
+  res.redirect("/")
+})
 
 app.post("/:listiD/:taskId/delete", (req, res) => {
   List.findById(req.body.listId, (error, list) => {

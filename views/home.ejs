@@ -5,12 +5,18 @@
 </div>
 <div class="box">
   <% lists.forEach((list) => { %>
-  <form action="/<%= list.id %>" method="get">
-    <div class="item">
-      <p><%= list.name %></p>
+
+  <div class="item">
+    <p><%= list.name %></p>
+    <form action="/<%= list.id %>/delete" method="post" onSubmit="return confirm('Are you sure you want to delete this list?')">
+      <input type="hidden" name="listId" value="<%=list.id %>">
+      <button type="submit" ><i class="fa-regular fa-trash-can fa-lg"></i></button>
+    </form>
+    <form action="/<%= list.id %>" method="get">
       <button type="submit"><i class="fa-solid fa-chevron-right fa-lg"></i></button>
-    </div>
-  </form>
+    </form>
+  </div>
+
   <% }) %>
 
 
