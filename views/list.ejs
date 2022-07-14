@@ -14,7 +14,7 @@
   <% list.tasks.forEach(element => { %>
   <form class="" action="/<%= list.id %>/<%= element.id %>/delete" method="post">
     <div class="item">
-      <input type="checkbox" value="<%=list.id%>" name="<%= element.id %>" <%= element.checked ? "checked" : "" %>>
+      <input type="checkbox" value="<%=list.id%>" name="<%= element.id %>" <%= element.checked ? "checked style='text-decoration-color:\<\%\= list.color \%\>'" : "" %>>
       <p><%= element.task %></p>
       <input type="hidden" name="listId" value="<%= list.id %>">
       <input type="hidden" name="taskId" value="<%= element.id %>">
@@ -26,11 +26,22 @@
 
   <form action="/<%= list.id %>" method="post" class="item">
     <input type="hidden" name="_id" value="<%= list.id %>">
-    <input type="text" name="newTask" placeholder="Enter a new task..." autocomplete="off">
+    <input type="text" name="newTask" id="newTask" placeholder="Enter a new task..." autocomplete="off">
     <button type="submit" name="addButton">+</button>
   </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('html').css("background-color", "<%= list.color %>80");
+    $('#heading').css("background-color", "<%= list.color %>");
+    $('input:checked+p').css("text-decoration-color", "<%= list.color %>");
+    $('form.item button').css("background-color", "<%= list.color %>");
+    $('input[type="text"]').focus(function() {
+      $(this).css("box-shadow", "inset 0 -3px 0 0 <%= list.color %>");
+    });
+  });
+</script>
 <%- include('footer'); -%>

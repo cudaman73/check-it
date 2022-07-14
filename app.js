@@ -16,6 +16,39 @@ mongoose.connect(
   `mongodb+srv://${secret.user}:${secret.password}@cluster0.dam38h3.mongodb.net/todolistDB?retryWrites=true&w=majority`
 );
 
+const colors= [
+  "#D2E59E",
+  "#B1C1C0",
+  "#E15554",
+  "#4D9DE0",
+  "#E1BC29",
+  "#3BB273",
+  "#7768AE",
+  "#34312D",
+  "#D9C5B2",
+  "#8CFF98",
+  "#483519",
+  "#305252",
+  "#488286",
+  "#B2FF9E",
+  "#086375",
+  "#3C1642",
+  "#3D2C2E",
+  "#77A6B6",
+  "#C455A8",
+  "#CF8BA3",
+  "#DB5ABA",
+  "#F7A072",
+  "#0FA3B1",
+  "#5C1A1B",
+  "#67597A",
+  "#6E8894",
+  "#FFED66",
+  "#00CECB",
+  "#7E1F86",
+  "#A14DA0"
+]
+
 const itemsSchema = {
   task: {
     type: String,
@@ -32,7 +65,10 @@ const listSchema = {
     type: String,
     required: true
   },
-  tasks: [itemsSchema]
+  tasks: [itemsSchema],
+  color: {
+    type: String
+  }
 }
 
 
@@ -60,6 +96,7 @@ app.get("/", (req, res) => {
       }
       res.render('home-blank')
     } else {
+      console.log(lists);
       res.render('home', {
         lists: lists
       });
@@ -69,11 +106,13 @@ app.get("/", (req, res) => {
 
 
 app.post("/", (req, res) => {
+  random_color = colors[Math.floor(Math.random()*colors.length)]
   List.insertMany({
     name: req.body.newList,
     tasks: {
       task: "Enter your first task below"
-    }
+    },
+    color: random_color
   }, (error) => {
     if (error) {
       console.log(error);
@@ -90,7 +129,6 @@ app.get("/:listId", (req, res) => {
       console.log("There must have been an error, no list by that ID found");
       console.log(err);
     } else {
-      console.log(list);
       res.render('list', {
         list: list
       });

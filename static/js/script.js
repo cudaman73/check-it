@@ -6,4 +6,6 @@ $(document).ready(function() {
       data: {listId: this.value, taskId: this.name, checked: this.checked}
     })
   })
+
+
 });
