@@ -37,7 +37,6 @@
   $(document).ready(function() {
     $('html').css("background-color", "<%= list.color %>80");
     $('#heading').css("background-color", "<%= list.color %>");
-    $('input:checked+p').css("text-decoration-color", "<%= list.color %>");
     $('form.item button').css("background-color", "<%= list.color %>");
     $('input[type="text"]').focus(function() {
       $(this).css("box-shadow", "inset 0 -3px 0 0 <%= list.color %>");
