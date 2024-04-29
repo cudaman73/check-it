@@ -1,9 +1,8 @@
 //jshint esversion:6
-
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const secret = require("./secret")
 
 const app = express();
 app.use(express.static('static'))
@@ -13,7 +12,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 mongoose.connect(
-  `mongodb+srv://${secret.user}:${secret.password}@cluster0.dam38h3.mongodb.net/todolistDB?retryWrites=true&w=majority`
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.dam38h3.mongodb.net/todolistDB?retryWrites=true&w=majority`
 );
 
 const colors= [
