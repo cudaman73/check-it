@@ -124,14 +124,19 @@ app.post("/", (req, res) => {
 
 app.get("/:listId", (req, res) => {
   List.findById(req.params.listId, (err, list) => {
-    if (list === null) {
-      console.log("There must have been an error, no list by that ID found");
-      console.log(err);
-    } else {
-      res.render('list', {
-        list: list
-      });
+    if (err) {
+      console.error("Error finding list:", err);
+      return res.status(500).send('Internal Server Error');
     }
+
+    if (!list) {
+      console.log("No list found with the given ID");
+      return res.status(404).send('List not found');
+    }
+
+    res.render('list', {
+      list: list
+    });
   });
 });
 
@@ -157,6 +162,7 @@ app.post("/:listId", (req, res) => {
 });
 
 app.put("/:listId/put", (req, res) => {
+  console.log(req.body);
   List.updateOne({
     _id: req.body.listId,
     "tasks._id": req.body.taskId
@@ -164,12 +170,19 @@ app.put("/:listId/put", (req, res) => {
     "$set": {
       "tasks.$.checked": req.body.checked
     }
-  }, (error) => {
+  }, (error, result) => {
     if (error) {
       console.log(error);
+      res.status(500).send("Error updating task");
+    } else {
+      if (result.nModified === 0) {
+        res.status(404).send("Task not found");
+      } else {
+        res.status(200).send("Task updated successfully");
+      }
     }
-  })
-})
+  });
+});
 
 app.post("/:listId/delete", (req, res) => {
   List.deleteOne({

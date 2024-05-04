@@ -10,7 +10,7 @@
 
 </div>
 
-<div class="box">
+<!-- <div class="box">
   <% list.tasks.forEach(element => { %>
   <form class="" action="/<%= list.id %>/<%= element.id %>/delete" method="post">
     <div class="item">
@@ -21,8 +21,20 @@
       <button type="submit"><i class="fa-solid fa-trash-can fa-lg"></i></button>
     </div>
   </form>
-  <% }) %>
+  <% }) %> -->
 
+  <div class="box">
+    <% list.tasks.forEach(element => { %>
+      <div class="item clickable" data-task-id="<%= element.id %>">
+        <input type="checkbox" value="<%=list.id%>" name="<%= element.id %>" <%= element.checked ? "checked style='text-decoration-color:\<\%\= list.color \%\>'" : "" %>>
+        <p><%= element.task %></p>
+        <form action="/<%= list.id %>/<%= element.id %>/delete" method="post">
+          <input type="hidden" name="listId" value="<%= list.id %>">
+          <input type="hidden" name="taskId" value="<%= element.id %>">
+          <button type="submit"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+        </form>
+      </div>
+    <% }) %>
 
   <form action="/<%= list.id %>" method="post" class="item">
     <input type="hidden" name="_id" value="<%= list.id %>">
@@ -31,8 +43,37 @@
   </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/script.js"></script>
+
+<!-- <script type="text/javascript">
+  $(document).ready(function() {
+    $('html').css("background-color", "<%= list.color %>80");
+    $('#heading').css("background-color", "<%= list.color %>");
+    $('form.item button').css("background-color", "<%= list.color %>");
+    $('input[type="text"]').focus(function() {
+      $(this).css("box-shadow", "inset 0 -3px 0 0 <%= list.color %>");
+    });
+
+    $('input[type="checkbox"]').click(function() {
+      $.ajax({
+        url: "/"+ this.name + "/put",
+        type: "put",
+        data: {listId: this.value, taskId: this.name, checked: this.checked}
+    })
+  });
+
+    // Task view click event
+    $('.item').on('click', function(event) {
+      if (!$(event.target).is('button, i, input')) {
+        console.log("Clicked element:", this);
+        const taskId = $(this).data('task-id');
+        console.log("Clicked taskId:", taskId);
+        const checkbox = $(this).find('input[type="checkbox"]');
+        checkbox.prop('checked', !checkbox.prop('checked')).trigger('click');
+      }
+    });
+
+  });
+</script> -->
 <script type="text/javascript">
   $(document).ready(function() {
     $('html').css("background-color", "<%= list.color %>80");
@@ -41,6 +82,42 @@
     $('input[type="text"]').focus(function() {
       $(this).css("box-shadow", "inset 0 -3px 0 0 <%= list.color %>");
     });
+
+    // Task view click event
+    $('.item').on('click', function(event) {
+      if (!$(event.target).is('button, i, input')) {
+        const taskId = $(this).data('task-id');
+        const checkbox = $(this).find('input[type="checkbox"]');
+        const isChecked = !checkbox.prop('checked');
+
+        console.log("isChecked value:", isChecked);
+    console.log("Type of isChecked:", typeof isChecked);
+        
+        // Update the task's checked state
+        $.ajax({
+          url: "/" + taskId + "/put",
+          type: "put",
+          data: {
+            listId: "<%= list.id %>",
+            taskId: taskId,
+            checked: isChecked
+          },
+          success: function(response) {
+            // Update the checkbox state and text decoration based on the updated checked state
+            checkbox.prop('checked', isChecked);
+            if (isChecked) {
+              checkbox.next('p').css('text-decoration', 'line-through');
+              checkbox.next('p').css('text-decoration-thickness', '3px');
+              checkbox.next('p').css('text-decoration-color', '<%= list.color %>');
+            } else {
+              checkbox.next('p').css('text-decoration', 'none');
+            }
+          }
+        });
+      }
+    });
   });
 </script>
+
+<script type="text/javascript" src="js/script.js"></script>
 <%- include('footer'); -%>

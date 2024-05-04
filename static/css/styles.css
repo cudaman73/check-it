@@ -38,6 +38,15 @@ h1 {
   text-align: center;
 }
 
+.clickable{
+  cursor: pointer;
+}
+
+.clickable form,
+.clickable form button {
+  cursor: inherit;
+}
+
 .item {
   min-height: 70px;
   display: flex;

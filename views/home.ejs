@@ -6,28 +6,37 @@
   </div>
 
 </div>
-<div class="box">
-  <% lists.forEach((list) => { %>
 
-  <div class="item">
-    <p><%= list.name %></p>
-    <form action="/<%= list.id %>/delete" method="post" onSubmit="return confirm('Are you sure you want to delete this list?')">
-      <input type="hidden" name="listId" value="<%=list.id %>">
-      <button type="submit"><i class="fa-regular fa-trash-can fa-lg"></i></button>
-    </form>
-    <form action="/<%= list.id %>" method="get">
-      <button type="submit"><i class="fa-solid fa-chevron-right fa-lg"></i></button>
-    </form>
-  </div>
-
-  <% }) %>
-
-
+  <div class="box">
+    <% lists.forEach((list) => { %>
+      <div class="item clickable" data-list-id="<%= list.id %>">
+        <p><%= list.name %></p>
+        <form action="/<%= list.id %>/delete" method="post" onSubmit="return confirm('Are you sure you want to delete this list?')">
+          <input type="hidden" name="listId" value="<%=list.id %>">
+          <button type="submit"><i class="fa-regular fa-trash-can fa-lg"></i></button>
+        </form>
+        <form action="/<%= list.id %>" method="get">
+          <button type="submit"><i class="fa-solid fa-chevron-right fa-lg"></i></button>
+        </form>
+      </div>
+    <% }) %>
 
   <form action="/" method="post" class="item">
     <input type="text" name="newList" placeholder="Add a new list..." autocomplete="off">
     <button type="submit" name="addButton">+</button>
   </form>
+
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  // List view click event
+  $('.item').on('click', function(event) {
+    const listId = $(this).data('list-id');
+  window.location.href = `/${listId}`;
+  });
+
+});
+</script>
 
 <%- include('footer'); -%>
